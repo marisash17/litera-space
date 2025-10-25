@@ -1,29 +1,51 @@
 <?php
 
-use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\RakPinjamController;
 
-// Halaman utama langsung arahkan ke login
+/*
+|--------------------------------------------------------------------------
+| Web Routes
+|--------------------------------------------------------------------------
+|
+| Halaman pertama diarahkan ke login (Breeze default).
+| Setelah login, user masuk ke dashboard dari RakPinjamController.
+|
+*/
+
+// -----------------------------
+// 🟢 HALAMAN LOGIN (awal)
+// -----------------------------
 Route::get('/', function () {
-    return redirect('/login');
+    // Langsung arahkan ke halaman login Breeze
+    return redirect()->route('login');
 });
 
-// Grup route untuk user yang sudah login
+// -----------------------------
+// 🔒 HALAMAN KHUSUS USER LOGIN
+// -----------------------------
 Route::middleware(['auth'])->group(function () {
-    // Route profil (dibutuhkan oleh Breeze)
+
+    // 🏠 Dashboard user
+    Route::get('/dashboard', [RakPinjamController::class, 'dashboard'])->name('dashboard');
+
+    // 📚 Rak Pinjam
+    Route::get('/rak-pinjam', [RakPinjamController::class, 'index'])->name('rak.pinjam');
+    Route::get('/buku/baca/{id}', [RakPinjamController::class, 'baca'])->name('buku.baca');
+    Route::get('/buku/kembalikan/{id}', [RakPinjamController::class, 'kembalikan'])->name('buku.kembalikan');
+
+    // 🕘 Riwayat Peminjaman
+    Route::get('/riwayat', [RakPinjamController::class, 'riwayat'])->name('riwayat');
+    Route::get('/riwayat-peminjaman', [RakPinjamController::class, 'riwayat'])->name('riwayat.peminjaman');
+
+    // 👤 Profil user (dari Breeze)
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
-
-    // Dashboard admin dan user
-    Route::get('/dashboard', function () {
-        if (auth()->user()->role === 'admin') {
-            return view('admin.dashboard');
-        } else {
-            return view('user.dashboard');
-        }
-    })->name('dashboard');
 });
 
-// Route autentikasi bawaan Breeze
-require __DIR__.'/auth.php';
+// -----------------------------
+// 🧩 AUTH ROUTES (dari Breeze)
+// -----------------------------
+require __DIR__ . '/auth.php';
