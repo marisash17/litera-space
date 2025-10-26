@@ -5,7 +5,7 @@ use Illuminate\Support\Facades\Route;
 
 // Halaman utama langsung arahkan ke login
 Route::get('/', function () {
-    return redirect('/login');
+    return view('auth.login'); // karena kita pindahkan view ke folder auth
 });
 
 // Grup route untuk user yang sudah login
