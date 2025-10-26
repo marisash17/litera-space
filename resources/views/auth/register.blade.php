@@ -260,7 +260,7 @@
 <body>
     <div class="container">
         <div class="image-section">
-            <img src="{{ asset('images/literaspacelogo.png') }}" alt="LiteraSpace Illustration" onerror="this.src='https://cdn.pixabay.com/photo/2018/03/07/18/42/men-3205710_1280.png'">
+            <img src="{{ asset('images/literaspace-logo.png') }}" alt="LiteraSpace Illustration" onerror="this.src='https://cdn.pixabay.com/photo/2018/03/07/18/42/men-3205710_1280.png'">
             <h2>Bergabung dengan LiteraSpace</h2>
             <p>Buat akun dan akses koleksi buku digital terlengkap</p>
         </div>
