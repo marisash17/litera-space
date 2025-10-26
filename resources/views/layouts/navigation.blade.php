@@ -11,27 +11,26 @@
 
     <style>
         :root {
-            --primary: #4361ee;
-            --secondary: #3f37c9;
-            --accent: #4cc9f0;
+            --primary: #D4B896;       /* accent admin */
+            --primary-dark: #C19A6B;  /* accent-dark admin */
+            --secondary: #4361ee;
             --success: #4bb543;
             --warning: #ffcc00;
-            --bg-pastel: #ffffff; /* ganti jadi putih */
+            --bg-pastel: #FBEFE3;     /* cream admin */
         }
 
-        /* Background utama */
         body {
             background-color: var(--bg-pastel);
         }
 
         /* Navbar */
         .navbar {
-            background-color: var(--bg-pastel) !important;
+            background-color: var(--primary) !important;
         }
 
         .navbar-brand {
             font-weight: 700;
-            color: var(--primary) !important;
+            color: white !important;
         }
 
         .navbar-brand img {
@@ -47,10 +46,11 @@
             margin: 0 5px;
             border-radius: 8px;
             transition: all 0.3s ease;
+            color: white !important;
         }
         .nav-link:hover, .nav-link.active {
-            background-color: rgba(67, 97, 238, 0.1);
-            color: var(--primary) !important;
+            background-color: var(--primary-dark);
+            color: white !important;
         }
 
         /* User Avatar */
@@ -58,7 +58,7 @@
             width: 35px;
             height: 35px;
             border-radius: 50%;
-            background: var(--primary);
+            background: var(--primary-dark);
             color: #fff;
             display: flex;
             align-items: center;
@@ -69,27 +69,26 @@
 
         /* Logout Button */
         .logout-btn {
-            color: #6c757d;
+            color: #fff;
             border: none;
-            background: none;
+            background: var(--primary-dark);
             padding: 8px 12px;
             border-radius: 8px;
             transition: all 0.3s ease;
         }
         .logout-btn:hover {
-            color: #dc3545;
-            background-color: rgba(220, 53, 69, 0.1);
+            background-color: var(--secondary);
         }
 
         /* Search Bar */
         .search-bar input:focus {
             box-shadow: none;
-            border-color: var(--primary);
+            border-color: var(--primary-dark);
         }
 
         /* Banner */
         .welcome-banner {
-            background: linear-gradient(135deg, var(--primary) 0%, var(--accent) 100%);
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
         }
 
         /* Cards Hover */
@@ -121,7 +120,7 @@
 </head>
 <body>
     <!-- Navbar -->
-    <nav class="navbar navbar-expand-lg navbar-light border-bottom shadow-sm">
+    <nav class="navbar navbar-expand-lg navbar-light shadow-sm">
         <div class="container">
             <!-- Brand -->
             <a class="navbar-brand d-flex align-items-center" href="{{ route('dashboard') }}">
@@ -165,13 +164,16 @@
         </div>
     </nav>
 
-    <!-- Main Content -->
-    <main>
+    <!-- Content -->
+    <div class="container mt-4">
         @yield('content')
-    </main>
+    </div>
 
-    <!-- Scripts -->
+    <!-- Footer -->
+    <footer class="bg-primary-dark text-white text-center py-4 mt-6">
+        <p class="mb-0">Oktober 2025 LiteraSpace | Kelompok Magang Polindra</p>
+    </footer>
+
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-    @yield('scripts')
 </body>
 </html>

@@ -21,12 +21,12 @@ class RakPinjamController extends Controller
             ->get();
 
         $rakPinjamCount = Book::where('status', 'dipinjam')
-                            ->where('user_id', auth()->id())
-                            ->count();
+                              ->where('user_id', auth()->id())
+                              ->count();
 
         $riwayatCount = Book::where('status', 'dikembalikan')
-                            ->where('user_id', auth()->id())
-                            ->count();
+                             ->where('user_id', auth()->id())
+                             ->count();
 
         return view('user.dashboard', compact('books', 'rakPinjamCount', 'riwayatCount'));
     }
@@ -62,9 +62,32 @@ class RakPinjamController extends Controller
     public function kembalikan($id)
     {
         $book = Book::findOrFail($id);
+
+        // Pastikan buku itu milik user
+        if ($book->user_id != auth()->id()) {
+            return redirect()->back()->with('error', 'Anda tidak memiliki izin untuk mengembalikan buku ini.');
+        }
+
         $book->status = 'dikembalikan';
+        $book->user_id = null; // reset user_id supaya bisa dipinjam orang lain
         $book->save();
 
         return redirect()->route('rak.pinjam')->with('success', 'Buku berhasil dikembalikan!');
+    }
+
+    // Fitur tambah buku ke rak pinjam user
+    public function pinjam($id)
+    {
+        $book = Book::findOrFail($id);
+
+        if ($book->status == 'dipinjam') {
+            return redirect()->back()->with('error', 'Buku sudah dipinjam orang lain.');
+        }
+
+        $book->status = 'dipinjam';
+        $book->user_id = auth()->id();
+        $book->save();
+
+        return redirect()->back()->with('success', 'Buku berhasil ditambahkan ke rak Anda!');
     }
 }

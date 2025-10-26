@@ -1,10 +1,13 @@
 <!DOCTYPE html>
 <html lang="id">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>LiteraSpace - Login</title>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>{{ config('app.name', 'LiteraSpace') }} - Login</title>
+
+    <!-- Font -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+
     <style>
         * {
             margin: 0;
@@ -34,8 +37,7 @@
 
         .image-section {
             flex: 1;
-            background: linear-gradient(135deg, #fbefe3, white
-            );
+            background: linear-gradient(135deg, #fbefe3, white);
             display: flex;
             flex-direction: column;
             justify-content: center;
@@ -187,15 +189,15 @@
             .container {
                 flex-direction: column;
             }
-            
+
             .image-section {
                 padding: 30px 20px;
             }
-            
+
             .image-section img {
                 max-width: 200px;
             }
-            
+
             .form-section {
                 padding: 30px 25px;
             }
@@ -209,19 +211,19 @@
             <h2>Selamat Datang di LiteraSpace</h2>
             <p>Jelajahi dunia literasi digital dengan koleksi buku terlengkap</p>
         </div>
-        
+
         <div class="form-section">
             <div class="logo">LiteraSpace</div>
             <h1>Selamat Datang</h1>
             <p class="subtitle">Masuk untuk melanjutkan ke akun Anda</p>
-            
+
             <form method="POST" action="{{ route('login') }}">
                 @csrf
                 <div class="form-group">
                     <label for="email">Alamat Email</label>
                     <input type="email" id="email" name="email" placeholder="admin@literaspace.com" value="{{ old('email') }}" required autofocus>
                 </div>
-                
+
                 <div class="form-group">
                     <label for="password">Kata Sandi</label>
                     <div class="input-with-icon">
@@ -229,15 +231,21 @@
                         <button type="button" class="password-toggle" onclick="togglePassword('password')">👁️</button>
                     </div>
                 </div>
-                
+
                 <div class="forgot-password">
                     @if (Route::has('password.request'))
                         <a href="{{ route('password.request') }}">Lupa Kata Sandi?</a>
                     @endif
                 </div>
-                
+
+                @if (session('success'))
+                    <div class="mb-4 p-3 text-green-800 bg-green-100 rounded-lg">
+                        {{ session('success') }}
+                    </div>
+                @endif
+
                 <button type="submit" class="btn-login">Masuk</button>
-                
+
                 <div class="auth-link">
                     Belum punya akun? <a href="{{ route('register') }}">Daftar di sini</a>
                 </div>

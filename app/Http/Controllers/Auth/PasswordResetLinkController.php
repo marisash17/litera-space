@@ -2,26 +2,24 @@
 
 namespace App\Http\Controllers\Auth;
 
-use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Password;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Password;
-use Illuminate\View\View;
+use App\Http\Controllers\Controller;
+use App\Models\User;
 
 class PasswordResetLinkController extends Controller
 {
     /**
-     * Display the password reset link request view.
+     * Tampilkan halaman forgot password
      */
-    public function create(): View
+    public function create()
     {
         return view('auth.forgot-password');
     }
 
     /**
-     * Handle an incoming password reset link request.
-     *
-     * @throws \Illuminate\Validation\ValidationException
+     * Proses kirim link reset password
      */
     public function store(Request $request): RedirectResponse
     {
@@ -29,16 +27,29 @@ class PasswordResetLinkController extends Controller
             'email' => ['required', 'email'],
         ]);
 
-        // We will send the password reset link to this user. Once we have attempted
-        // to send the link, we will examine the response then see the message we
-        // need to show to the user. Finally, we'll send out a proper response.
+        // Pastikan email milik user dengan role 'user'
+        $user = User::where('email', $request->email)
+                    ->where('role', 'user')
+                    ->first();
+
+        if (!$user) {
+            return back()->withErrors([
+                'email' => 'Email tidak terdaftar sebagai user.'
+            ]);
+        }
+
+        // Kirim link reset password
         $status = Password::sendResetLink(
-            $request->only('email')
+            ['email' => $user->email]
         );
 
-        return $status == Password::RESET_LINK_SENT
-                    ? back()->with('status', __($status))
-                    : back()->withInput($request->only('email'))
-                            ->withErrors(['email' => __($status)]);
+        if ($status === Password::RESET_LINK_SENT) {
+            return back()->with('status', 'Link reset password sudah dikirim ke email Anda.');
+        }
+
+        // Jika gagal, tampilkan error default
+        return back()->withErrors([
+            'email' => 'Gagal mengirim link reset password. Silakan coba lagi.'
+        ]);
     }
 }
