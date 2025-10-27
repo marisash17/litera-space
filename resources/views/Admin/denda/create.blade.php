@@ -6,6 +6,7 @@
 <div class="bg-white p-6 rounded-lg shadow max-w-4xl mx-auto">
     <h2 class="text-xl font-semibold text-gray-800 mb-6">Tambah Data Denda</h2>
 
+    {{-- Form Simpan Denda --}}
     <form action="{{ route('admin.denda.store') }}" method="POST">
         @csrf
 
@@ -14,21 +15,24 @@
             <label class="block text-sm font-medium text-gray-700">Pilih Peminjam *</label>
             <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-2">
                 @foreach($peminjamans as $peminjaman)
-                <div class="p-4 border border-gray-300 rounded-lg cursor-pointer hover:bg-green-50 peminjam-item transition"
-                     data-id="{{ $peminjaman->id }}"
-                     data-buku="{{ $peminjaman->buku->judul ?? '-' }}"
-                     data-penulis="{{ $peminjaman->buku->penulis ?? '-' }}"
-                     data-member="{{ $peminjaman->member->nama ?? '-' }}"
-                     data-email="{{ $peminjaman->member->email ?? '-' }}"
-                     data-pinjam="{{ $peminjaman->tanggal_peminjaman }}"
-                     data-kembali="{{ $peminjaman->tanggal_pengembalian }}"
-                     data-status="{{ $peminjaman->status }}">
-                    <h4 class="font-medium text-gray-900">{{ $peminjaman->member->nama ?? '-' }}</h4>
-                    <p class="text-sm text-gray-700">{{ $peminjaman->buku->judul ?? '-' }}</p>
-                </div>
+                    <div class="p-4 border border-gray-300 rounded-lg cursor-pointer hover:bg-green-50 peminjam-item transition"
+                        data-id="{{ $peminjaman->id }}"
+                        data-buku="{{ $peminjaman->buku->judul ?? '-' }}"
+                        data-penulis="{{ $peminjaman->buku->penulis ?? '-' }}"
+                        data-member="{{ $peminjaman->member->nama ?? '-' }}"
+                        data-email="{{ $peminjaman->member->email ?? '-' }}"
+                        data-pinjam="{{ $peminjaman->tanggal_peminjaman }}"
+                        data-kembali="{{ $peminjaman->tanggal_pengembalian }}"
+                        data-status="{{ ucfirst($peminjaman->status) }}">
+                        <h4 class="font-medium text-gray-900">{{ $peminjaman->member->nama ?? '-' }}</h4>
+                        <p class="text-sm text-gray-700">{{ $peminjaman->buku->judul ?? '-' }}</p>
+                    </div>
                 @endforeach
             </div>
             <input type="hidden" name="peminjaman_id" id="peminjaman_id" required>
+            @error('peminjaman_id')
+                <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
+            @enderror
         </div>
 
         {{-- Detail Peminjaman --}}
@@ -61,8 +65,12 @@
         <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
             <div>
                 <label for="jumlah_denda" class="block text-sm font-medium text-gray-700">Jumlah Denda (Rp) *</label>
-                <input type="number" name="jumlah_denda" id="jumlah_denda" value="{{ old('jumlah_denda', 0) }}" min="0" required
+                <input type="number" name="jumlah_denda" id="jumlah_denda"
+                       value="{{ old('jumlah_denda', 0) }}" min="0" required
                        class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2 focus:ring-green-500 focus:border-green-500">
+                @error('jumlah_denda')
+                    <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
+                @enderror
             </div>
 
             <div>
@@ -84,17 +92,19 @@
 
         {{-- Tombol --}}
         <div class="flex justify-end space-x-3">
-            <a href="{{ route('admin.denda.index') }}" 
+            <a href="{{ route('admin.denda.index') }}"
                class="bg-gray-500 text-white px-4 py-2 rounded hover:bg-gray-600 transition">
                 Batal
             </a>
-        <button type="submit" class="btn-primary text-white px-6 py-3 rounded-lg font-medium transition flex items-center">
+            <button type="submit"
+                    class="bg-green-600 hover:bg-green-700 text-white px-6 py-3 rounded-lg font-medium transition flex items-center">
                 Simpan Denda
             </button>
         </div>
     </form>
 </div>
 
+{{-- Script untuk interaksi peminjaman --}}
 @section('scripts')
 <script>
 document.addEventListener('DOMContentLoaded', function() {
@@ -116,8 +126,8 @@ document.addEventListener('DOMContentLoaded', function() {
 
             peminjamanDetail.classList.remove('hidden');
 
-            peminjamanItems.forEach(i => i.classList.remove('bg-green-100'));
-            item.classList.add('bg-green-100');
+            peminjamanItems.forEach(i => i.classList.remove('bg-green-100', 'border-green-500'));
+            item.classList.add('bg-green-100', 'border-green-500');
         });
     });
 });

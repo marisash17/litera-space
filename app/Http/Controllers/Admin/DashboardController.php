@@ -23,7 +23,8 @@ class DashboardController extends Controller
         $peminjamanAktif = Peminjaman::whereNull('tanggal_dikembalikan')->count();
 
         // Total denda tertunggak
-        $totalDenda = Denda::where('status_pembayaran', false)->sum('jumlah_denda');
+        // Perbaikan: pastikan filter sesuai tipe boolean di DB
+        $totalDenda = Denda::where('status_pembayaran', 0)->sum('jumlah_denda');
 
         // Peminjaman hari ini
         $peminjamanHariIni = Peminjaman::whereDate('tanggal_peminjaman', Carbon::today())->count();

@@ -14,7 +14,8 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
-        'is_admin'
+        'is_admin',
+        'member_id'
     ];
 
     protected $hidden = [
@@ -26,6 +27,12 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
         'is_admin' => 'boolean'
     ];
+
+    public function member()
+    {
+        return $this->belongsTo(Member::class); 
+    }
+
 
     public function peminjaman()
     {

@@ -9,19 +9,10 @@
         --hover-pastel: #E7BFA7;
     }
 
-    /* Warna dasar */
-    body {
-        background-color: #FFF6F0;
-        color: var(--primary-text);
-    }
+    body { background-color: #FFF6F0; color: var(--primary-text); }
 
-    .bg-primary {
-        background-color: var(--primary-pastel) !important;
-    }
-
-    .text-primary {
-        color: var(--primary-text) !important;
-    }
+    .bg-primary { background-color: var(--primary-pastel) !important; }
+    .text-primary { color: var(--primary-text) !important; }
 
     .btn-primary {
         background-color: var(--primary-pastel) !important;
@@ -29,82 +20,27 @@
         color: var(--primary-text) !important;
         transition: all 0.3s ease;
     }
-
     .btn-primary:hover {
         background-color: var(--hover-pastel) !important;
         border-color: var(--hover-pastel) !important;
         color: var(--primary-text) !important;
     }
 
-    /* Profil circle */
-    .profile-circle {
-        background-color: var(--primary-pastel) !important;
-        color: var(--primary-text);
-    }
+    .profile-circle { background-color: var(--primary-pastel) !important; color: var(--primary-text); }
+    .search-bar input { background-color: #fff !important; }
 
-    /* Search bar */
-    .search-bar input {
-        background-color: #fff !important;
-    }
+    .stat-card { background-color: #fff !important; border: none !important; border-radius: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.08); transition: all 0.3s ease; }
+    .stat-card:hover { transform: translateY(-4px); box-shadow: 0 10px 25px rgba(0,0,0,0.15); }
+    .stat-icon { background-color: rgba(0,0,0,0.04) !important; }
 
-    /* CARD STATS: kembali ke putih */
-    .stat-card {
-        background-color: #fff !important;
-        border: none !important;
-        border-radius: 12px;
-        box-shadow: 0 4px 12px rgba(0,0,0,0.08);
-        transition: all 0.3s ease;
-    }
+    .book-card { background-color: var(--primary-pastel) !important; border: none !important; border-radius: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.08); transition: all 0.3s ease; }
+    .book-card:hover { transform: translateY(-5px); box-shadow: 0 10px 25px rgba(0,0,0,0.15); }
 
-    .stat-card:hover {
-        transform: translateY(-4px);
-        box-shadow: 0 10px 25px rgba(0,0,0,0.15);
-    }
+    .book-cover { background: linear-gradient(135deg, var(--primary-pastel), var(--hover-pastel)); color: var(--primary-text); }
+    .btn-link.text-primary { color: var(--primary-text) !important; text-decoration: none; }
+    .btn-link.text-primary:hover { color: var(--hover-pastel) !important; text-decoration: underline; }
 
-    /* Ikon dalam stat-card */
-    .stat-icon {
-        background-color: rgba(0,0,0,0.04) !important;
-    }
-
-    /* Book card */
-    .book-card {
-        background-color: var(--primary-pastel) !important;
-        border: none !important;
-        border-radius: 12px;
-        box-shadow: 0 4px 12px rgba(0,0,0,0.08);
-        transition: all 0.3s ease;
-    }
-
-    .book-card:hover {
-        transform: translateY(-5px);
-        box-shadow: 0 10px 25px rgba(0,0,0,0.15);
-    }
-
-    /* Book cover */
-    .book-cover {
-        background: linear-gradient(135deg, var(--primary-pastel), var(--hover-pastel));
-        color: var(--primary-text);
-    }
-
-    /* Link */
-    .btn-link.text-primary {
-        color: var(--primary-text) !important;
-        text-decoration: none;
-    }
-
-    .btn-link.text-primary:hover {
-        color: var(--hover-pastel) !important;
-        text-decoration: underline;
-    }
-
-    /* 🔹 Perubahan di sini: welcome-banner kembali putih */
-    .welcome-banner {
-        background-color: #ffffff !important;
-        color: var(--primary-text);
-        border: 1px solid rgba(0, 0, 0, 0.05);
-        box-shadow: 0 4px 12px rgba(0,0,0,0.08);
-        border-radius: 12px;
-    }
+    .welcome-banner { background-color: #ffffff !important; color: var(--primary-text); border: 1px solid rgba(0, 0, 0, 0.05); box-shadow: 0 4px 12px rgba(0,0,0,0.08); border-radius: 12px; }
 </style>
 
 @section('content')
@@ -203,9 +139,9 @@
                         @endif
                     </h2>
                     @if(!request('search'))
-                    <a href="#" class="btn btn-link text-primary">
-                        Lihat Semua <i class="fas fa-chevron-right ms-1"></i>
-                    </a>
+                        <a href="#" class="btn btn-link text-primary">
+                            Lihat Semua <i class="fas fa-chevron-right ms-1"></i>
+                        </a>
                     @endif
                 </div>
                 
@@ -230,9 +166,14 @@
                                         <span class="badge bg-primary bg-opacity-10 text-primary">
                                             {{ $book->kategori ?? 'Umum' }}
                                         </span>
-                                        <a href="{{ route('rak.pinjam') }}" class="btn btn-primary btn-sm rounded-circle" title="Pinjam Buku">
-                                            <i class="fas fa-plus"></i>
-                                        </a>
+
+                                        <!-- FORM POST PINJAM BUKU -->
+<form action="{{ route('rak.add', $book->id) }}" method="POST">
+    @csrf
+    <button type="submit">Pinjam Buku</button>
+</form>
+
+
                                     </div>
                                 </div>
                             </div>

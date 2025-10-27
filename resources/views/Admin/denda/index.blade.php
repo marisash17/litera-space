@@ -57,7 +57,7 @@
                                 <i class="fas fa-edit"></i>
                             </a>
                             @if(!$denda->status_pembayaran)
-                                <form action="{{ route('denda.update', $denda->id) }}" method="POST" class="inline">
+                                <form action="{{ route('admin.denda.update', $denda->id) }}" method="POST" class="inline">
                                     @csrf
                                     @method('PUT')
                                     <input type="hidden" name="status_pembayaran" value="1">

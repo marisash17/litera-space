@@ -3,7 +3,8 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Models\Book;
+use App\Models\Buku;
+use App\Models\Peminjaman;
 
 class RakPinjamController extends Controller
 {
@@ -12,7 +13,7 @@ class RakPinjamController extends Controller
     {
         $search = $request->input('search');
 
-        $books = Book::query()
+        $books = Buku::query()
             ->when($search, function ($query, $search) {
                 return $query->where('judul', 'like', "%{$search}%")
                              ->orWhere('penulis', 'like', "%{$search}%")
@@ -20,11 +21,11 @@ class RakPinjamController extends Controller
             })
             ->get();
 
-        $rakPinjamCount = Book::where('status', 'dipinjam')
+        $rakPinjamCount = Buku::where('status', 'dipinjam')
                               ->where('user_id', auth()->id())
                               ->count();
 
-        $riwayatCount = Book::where('status', 'dikembalikan')
+        $riwayatCount = Buku::where('status', 'dikembalikan')
                              ->where('user_id', auth()->id())
                              ->count();
 
@@ -34,7 +35,7 @@ class RakPinjamController extends Controller
     // Halaman daftar buku yang sedang dipinjam
     public function index()
     {
-        $books = Book::where('status', 'dipinjam')
+        $books = Buku::where('status', 'dipinjam')
                      ->where('user_id', auth()->id())
                      ->get();
 
@@ -44,7 +45,7 @@ class RakPinjamController extends Controller
     // Halaman riwayat peminjaman
     public function riwayat()
     {
-        $riwayat = Book::where('status', 'dikembalikan')
+        $riwayat = Buku::where('status', 'dikembalikan')
                        ->where('user_id', auth()->id())
                        ->get();
 
@@ -54,40 +55,51 @@ class RakPinjamController extends Controller
     // Halaman baca buku
     public function baca($id)
     {
-        $book = Book::findOrFail($id);
+        $book = Buku::findOrFail($id);
         return view('user.baca-buku', compact('book'));
     }
+
+    // Aksi untuk meminjam buku
+public function pinjam($id)
+{
+    $book = Buku::findOrFail($id);
+
+    if ($book->status == 'dipinjam') {
+        return redirect()->back()->with('error', 'Buku sudah dipinjam orang lain.');
+    }
+
+    // Update status buku
+    $book->status = 'dipinjam';
+    $book->user_id = auth()->id(); // optional, jika ingin tahu siapa user terakhir
+    $book->save();
+
+    // Tambahkan ke tabel peminjaman
+    Peminjaman::create([
+        'buku_id' => $book->id,
+        'member_id' => auth()->user()->member->id ?? null, // pastikan user punya relasi member
+        'user_id' => auth()->id(), // user/petugas/admin yang input
+        'tanggal_peminjaman' => now(),
+        'tanggal_pengembalian' => now()->addDays(7), // misal 7 hari pinjam
+        'status' => 'dipinjam',
+        'keterangan' => 'Pinjaman dari rak pinjam'
+    ]);
+
+    return redirect()->route('rak.pinjam')->with('success', 'Buku berhasil ditambahkan ke rak Anda!');
+}
 
     // Aksi untuk mengembalikan buku
     public function kembalikan($id)
     {
-        $book = Book::findOrFail($id);
+        $book = Buku::findOrFail($id);
 
-        // Pastikan buku itu milik user
         if ($book->user_id != auth()->id()) {
             return redirect()->back()->with('error', 'Anda tidak memiliki izin untuk mengembalikan buku ini.');
         }
 
-        $book->status = 'dikembalikan';
-        $book->user_id = null; // reset user_id supaya bisa dipinjam orang lain
+        $book->status = 'tersedia';
+        $book->user_id = null;
         $book->save();
 
         return redirect()->route('rak.pinjam')->with('success', 'Buku berhasil dikembalikan!');
-    }
-
-    // Fitur tambah buku ke rak pinjam user
-    public function pinjam($id)
-    {
-        $book = Book::findOrFail($id);
-
-        if ($book->status == 'dipinjam') {
-            return redirect()->back()->with('error', 'Buku sudah dipinjam orang lain.');
-        }
-
-        $book->status = 'dipinjam';
-        $book->user_id = auth()->id();
-        $book->save();
-
-        return redirect()->back()->with('success', 'Buku berhasil ditambahkan ke rak Anda!');
     }
 }

@@ -15,7 +15,7 @@ class Denda extends Model
         'peminjaman_id',
         'jumlah_denda',
         'status_pembayaran',
-        'keterangan'
+        'keterangan',
     ];
 
     public function peminjaman()

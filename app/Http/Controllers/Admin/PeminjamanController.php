@@ -6,15 +6,16 @@ use App\Http\Controllers\Controller;
 use App\Models\Peminjaman;
 use App\Models\Buku;
 use App\Models\Member;
-use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Http;
+use Carbon\Carbon;
 
 class PeminjamanController extends Controller
 {
     public function index()
     {
-        $peminjamans = Peminjaman::with(['buku', 'member', 'user'])->paginate(10);
+        $peminjamans = Peminjaman::with(['buku', 'member'])->paginate(10);
         return view('admin.peminjaman.index', compact('peminjamans'));
     }
 
@@ -35,13 +36,12 @@ class PeminjamanController extends Controller
             'keterangan' => 'nullable|string'
         ]);
 
-        // Cek stok buku
         $buku = Buku::find($request->buku_id);
+
         if ($buku->stok < 1) {
             return back()->with('error', 'Stok buku tidak tersedia.');
         }
 
-        // Kurangi stok buku
         $buku->decrement('stok');
 
         Peminjaman::create([
@@ -89,7 +89,6 @@ class PeminjamanController extends Controller
 
     public function destroy(Peminjaman $peminjaman)
     {
-        // Kembalikan stok buku jika peminjaman dibatalkan
         if ($peminjaman->status == 'dipinjam') {
             $buku = Buku::find($peminjaman->buku_id);
             $buku->increment('stok');
@@ -99,5 +98,59 @@ class PeminjamanController extends Controller
 
         return redirect()->route('admin.peminjaman.index')
             ->with('success', 'Peminjaman berhasil dihapus');
+    }
+
+    // ✅ Fungsi kirim pengingat
+    public function kirimPengingat($id)
+    {
+        $peminjaman = Peminjaman::with('member', 'buku')->findOrFail($id);
+
+        $nomor = $peminjaman->member->no_hp;
+        $nama = $peminjaman->member->nama;
+        $judul = $peminjaman->buku->judul;
+        $tanggalKembali = Carbon::parse($peminjaman->tanggal_pengembalian)->translatedFormat('d F Y');
+
+        $pesan = "Halo $nama, Kami ingin mengingatkan bahwa buku \"$judul\" yang kamu pinjam harus dikembalikan pada tanggal $tanggalKembali. Mohon pastikan pengembalian tepat waktu, Terima kasih😊";
+
+        $response = Http::withHeaders([
+            'Authorization' => env('FONNTE_API_KEY'),
+        ])->post('https://api.fonnte.com/send', [
+            'target' => $nomor,
+            'message' => $pesan,
+        ]);
+
+        if ($response->successful()) {
+            return back()->with('success', "Pengingat berhasil dikirim ke $nama");
+        } else {
+            return back()->with('error', 'Gagal mengirim pengingat.');
+        }
+    }
+
+    // ✅ Fungsi kirim denda
+    public function kirimDenda($id)
+    {
+        $peminjaman = Peminjaman::with('member', 'buku')->findOrFail($id);
+
+        $nomor = $peminjaman->member->no_hp;
+        $nama = $peminjaman->member->nama;
+        $judul = $peminjaman->buku->judul;
+
+        $hariTerlambat = Carbon::parse($peminjaman->tanggal_pengembalian)->diffInDays(now());
+        $denda = $hariTerlambat * 1000;
+
+        $pesan = "Halo $nama, Anda terlambat mengembalikan buku \"$judul\" selama $hariTerlambat hari. Denda Anda sebesar Rp $denda. Mohon segera melunasi.";
+
+        $response = Http::withHeaders([
+            'Authorization' => env('FONNTE_API_KEY'),
+        ])->post('https://api.fonnte.com/send', [
+            'target' => $nomor,
+            'message' => $pesan,
+        ]);
+
+        if ($response->successful()) {
+            return back()->with('success', "Pesan denda berhasil dikirim ke $nama");
+        } else {
+            return back()->with('error', 'Gagal mengirim pesan denda.');
+        }
     }
 }

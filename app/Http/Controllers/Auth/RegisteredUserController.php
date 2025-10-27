@@ -4,7 +4,7 @@ namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
 use App\Models\User;
-use App\Models\Member; // ← tambahkan ini
+use App\Models\Member;
 use App\Providers\RouteServiceProvider;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Http\RedirectResponse;
@@ -25,23 +25,26 @@ class RegisteredUserController extends Controller
     {
         $request->validate([
             'name' => ['required', 'string', 'max:255'],
-            'email' => ['required', 'string', 'lowercase', 'email', 'max:255', 'unique:'.User::class],
+            'last_name' => ['required', 'string', 'max:255'],
+            'email' => ['required', 'string', 'email', 'max:255', 'unique:users,email'],
+            'phone' => ['required', 'string', 'max:20'],
+            'address' => ['required', 'string'],
             'password' => ['required', 'confirmed', Rules\Password::defaults()],
         ]);
 
-        // Simpan ke tabel users (default Laravel)
+        // Simpan ke tabel users
         $user = User::create([
-            'name' => $request->name,
+            'name' => $request->name . ' ' . $request->last_name,
             'email' => $request->email,
             'password' => Hash::make($request->password),
         ]);
 
-        // Tambahkan ke tabel members juga
+        // Simpan ke tabel members
         Member::create([
-            'nama' => $request->name,
+            'nama' => $request->name . ' ' . $request->last_name,
             'email' => $request->email,
-            'no_hp' => '-',       // bisa disesuaikan kalau form kamu ada kolom no_hp
-            'alamat' => '-',      // bisa disesuaikan juga
+            'no_hp' => $request->phone,
+            'alamat' => $request->address,
             'status' => 'user',
         ]);
 

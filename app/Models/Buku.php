@@ -21,11 +21,14 @@ class Buku extends Model
         'deskripsi',
         'foto',
         'kategori',
+        'status',    
+        'user_id', 
     ];
 
     // Relasi ke peminjaman
     public function peminjaman()
     {
-        return $this->hasMany(Peminjaman::class, 'buku_id', 'id');
+        return $this->hasMany(Peminjaman::class, 'buku_id');
     }
+
 }

@@ -46,10 +46,22 @@ Route::middleware(['auth'])->group(function () {
     // -----------------------------
     // Rak Pinjam (user)
     // -----------------------------
+    // Halaman rak pinjam
     Route::get('/rak-pinjam', [RakPinjamController::class, 'index'])->name('rak.pinjam');
-    Route::get('/buku/baca/{id}', [RakPinjamController::class, 'baca'])->name('buku.baca');
-    Route::get('/buku/kembalikan/{id}', [RakPinjamController::class, 'kembalikan'])->name('buku.kembalikan');
 
+    // Tambah buku ke rak pinjam → POST
+    Route::post('/rak-pinjam/add/{id}', [RakPinjamController::class, 'pinjam'])->name('rak.add');
+
+    // Kembalikan buku → POST
+    Route::post('/rak-pinjam/kembalikan/{id}', [RakPinjamController::class, 'kembalikan'])->name('kembalikan.buku');
+
+    // Baca buku → GET
+    Route::get('/buku/baca/{id}', [RakPinjamController::class, 'baca'])->name('baca.buku');
+
+    // Riwayat peminjaman
+    Route::get('/riwayat', [RakPinjamController::class, 'riwayat'])->name('riwayat');
+    Route::get('/riwayat-peminjaman', [RakPinjamController::class, 'riwayat'])->name('riwayat.peminjaman');
+    
     // -----------------------------
     // Riwayat Peminjaman (user)
     // -----------------------------
@@ -85,6 +97,10 @@ Route::prefix('admin')
         Route::resource('peminjaman', PeminjamanController::class)->except(['show']);
         Route::get('peminjaman/{id}/detail', [PeminjamanController::class, 'show'])->name('peminjaman.detail');
         Route::post('peminjaman/{id}/kembalikan', [PeminjamanController::class, 'kembalikan'])->name('peminjaman.kembalikan');
+        // Kirim Pengingat & Denda
+        Route::post('peminjaman/{id}/kirim-pengingat', [PeminjamanController::class, 'kirimPengingat'])->name('peminjaman.kirimPengingat');
+        Route::post('peminjaman/{id}/kirim-denda', [PeminjamanController::class, 'kirimDenda'])->name('peminjaman.kirimDenda');
+
 
         // Pengembalian
         Route::resource('pengembalian', PengembalianController::class);

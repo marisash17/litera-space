@@ -50,18 +50,42 @@
                     </td>
                     <td class="p-3 text-center">
                         <div class="flex justify-center space-x-2">
-                            <a href="{{ route('admin.peminjaman.edit', $peminjaman->id) }}" class="bg-blue-500 hover:bg-blue-600 text-white px-3 py-1 rounded-lg text-sm transition" title="Edit">
+                            <a href="{{ route('admin.peminjaman.edit', $peminjaman->id) }}" 
+                               class="bg-blue-500 hover:bg-blue-600 text-white px-3 py-1 rounded-lg text-sm transition" 
+                               title="Edit">
                                 <i class="fas fa-edit"></i>
                             </a>
+
                             @if($peminjaman->status == 'dipinjam')
-                                <a href="{{ route('admin.pengembalian.create') }}?peminjaman_id={{ $peminjaman->id }}" class="bg-green-500 hover:bg-green-600 text-white px-3 py-1 rounded-lg text-sm transition" title="Proses Pengembalian">
+                                <a href="{{ route('admin.pengembalian.create') }}?peminjaman_id={{ $peminjaman->id }}" 
+                                   class="bg-green-500 hover:bg-green-600 text-white px-3 py-1 rounded-lg text-sm transition" 
+                                   title="Proses Pengembalian">
                                     <i class="fas fa-undo"></i>
                                 </a>
                             @endif
+
+                            {{-- Tombol Kirim Pengingat --}}
+                            <form action="{{ route('admin.peminjaman.kirimPengingat', $peminjaman->id) }}" method="POST" onsubmit="return confirm('Kirim pengingat ke {{ $peminjaman->member->nama }}?')">
+                                @csrf
+                                <button type="submit" class="bg-yellow-500 hover:bg-yellow-600 text-white px-3 py-1 rounded-lg text-sm transition" title="Kirim Pengingat">
+                                    <i class="fas fa-bell"></i>
+                                </button>
+                            </form>
+
+                            {{-- Tombol Kirim Denda --}}
+                            @if($peminjaman->status == 'terlambat')
+                                <form action="{{ route('admin.peminjaman.kirimDenda', $peminjaman->id) }}" method="POST" onsubmit="return confirm('Kirim notifikasi denda ke {{ $peminjaman->member->nama }}?')">
+                                    @csrf
+                                    <button type="submit" class="bg-red-500 hover:bg-red-600 text-white px-3 py-1 rounded-lg text-sm transition" title="Kirim Denda">
+                                        <i class="fas fa-exclamation-triangle"></i>
+                                    </button>
+                                </form>
+                            @endif
+
                             <form action="{{ route('admin.peminjaman.destroy', $peminjaman->id) }}" method="POST" onsubmit="return confirm('Apakah Anda yakin?')">
                                 @csrf
                                 @method('DELETE')
-                                <button type="submit" class="bg-red-500 hover:bg-red-600 text-white px-3 py-1 rounded-lg text-sm transition" title="Hapus">
+                                <button type="submit" class="bg-gray-400 hover:bg-gray-500 text-white px-3 py-1 rounded-lg text-sm transition" title="Hapus">
                                     <i class="fas fa-trash"></i>
                                 </button>
                             </form>
