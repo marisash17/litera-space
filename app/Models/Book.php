@@ -9,25 +9,10 @@ class Book extends Model
 {
     use HasFactory;
 
-    // Tabel default sudah 'books', jadi tidak perlu diubah
-
     protected $fillable = [
         'judul',
         'penulis',
-        'penerbit',
-        'tahun_terbit',
-        'isbn',
-        'stok',
-        'deskripsi',
-        'foto',
-        'kategori',   // ditambahkan untuk search & filter
-        'status',
-        'user_id',
+        'kategori',
+        'status', // tersedia / dipinjam
     ];
-
-    // Relasi ke user (jika ada)
-    public function user()
-    {
-        return $this->belongsTo(User::class);
-    }
 }

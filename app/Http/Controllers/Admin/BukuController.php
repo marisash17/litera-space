@@ -5,13 +5,14 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\Buku;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 
 class BukuController extends Controller
 {
     public function index()
     {
-        $buku = Buku::latest()->paginate(10);
-        return view('admin.buku.index', compact('buku'));
+        $books = Buku::latest()->paginate(10); // ganti $buku -> $books
+        return view('admin.buku.index', compact('books'));
     }
 
     public function create()
@@ -65,8 +66,8 @@ class BukuController extends Controller
         ]);
 
         if ($request->hasFile('foto')) {
-            if ($buku->foto && \Storage::disk('public')->exists($buku->foto)) {
-                \Storage::disk('public')->delete($buku->foto);
+            if ($buku->foto && Storage::disk('public')->exists($buku->foto)) {
+                Storage::disk('public')->delete($buku->foto);
             }
             $validated['foto'] = $request->file('foto')->store('buku', 'public');
         }
@@ -78,8 +79,8 @@ class BukuController extends Controller
 
     public function destroy(Buku $buku)
     {
-        if ($buku->foto && \Storage::disk('public')->exists($buku->foto)) {
-            \Storage::disk('public')->delete($buku->foto);
+        if ($buku->foto && Storage::disk('public')->exists($buku->foto)) {
+            Storage::disk('public')->delete($buku->foto);
         }
         $buku->delete();
 

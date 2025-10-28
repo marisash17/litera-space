@@ -17,6 +17,7 @@ use App\Http\Controllers\Admin\DendaController;
 // Controller user
 use App\Http\Controllers\DashboardController as UserDashboard;
 use App\Http\Controllers\RakPinjamController;
+use App\Http\Controllers\BookController;
 
 // Middleware
 use App\Http\Middleware\IsAdmin;
@@ -56,6 +57,8 @@ Route::post('/rak/kembalikan/{id}', [RakPinjamController::class, 'kembalikan'])-
 
 // riwayat
 Route::get('/riwayat', [RakPinjamController::class, 'riwayat'])->name('riwayat.peminjaman');
+
+Route::get('/buku', [BookController::class, 'index'])->name('books.index');
 
     // -----------------------------
     // Riwayat Peminjaman (user)

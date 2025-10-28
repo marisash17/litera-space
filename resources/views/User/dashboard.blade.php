@@ -4,17 +4,16 @@
 
 <style>
     :root {
-        --primary: rgb(128, 150, 77);     /* hijau dari login */
-        --primary-dark: rgb(108, 130, 57); /* hijau dark dari login */
-        --secondary: #e09c08;             /* gold/orange dari login */
-        --bg-light: #f6f7fb;              /* background dari login */
-        --bg-cream: #fbefe3;              /* cream dari login */
-        --text-dark: #444;                /* text dari login */
-        --text-light: #666;               /* text light dari login */
-        --border: #ddd;                   /* border dari login */
+        --primary: rgb(128, 150, 77);     
+        --primary-dark: rgb(108, 130, 57); 
+        --secondary: #e09c08;             
+        --bg-light: #f6f7fb;              
+        --bg-cream: #fbefe3;              
+        --text-dark: #444;                
+        --text-light: #666;               
+        --border: #ddd;                   
     }
 
-    /* Warna dasar */
     body {
         background-color: var(--bg-light);
         color: var(--text-dark);
@@ -46,14 +45,12 @@
         box-shadow: 0 6px 20px rgba(128, 150, 77, 0.3);
     }
 
-    /* Profil circle */
     .profile-circle {
         background: linear-gradient(135deg, var(--primary), var(--primary-dark)) !important;
         color: white;
         font-weight: 600;
     }
 
-    /* Search bar */
     .search-bar input {
         background-color: white !important;
         border: 2px solid var(--border);
@@ -65,7 +62,6 @@
         box-shadow: 0 0 0 3px rgba(128, 150, 77, 0.1);
     }
 
-    /* CARD STATS: putih dengan aksen login */
     .stat-card {
         background: linear-gradient(135deg, white, var(--bg-cream)) !important;
         border: 1px solid var(--border) !important;
@@ -80,7 +76,6 @@
         box-shadow: 0 10px 25px rgba(128, 150, 77, 0.15);
     }
 
-    /* Ikon dalam stat-card */
     .stat-icon {
         background: var(--bg-cream) !important;
         border: 1px solid var(--border);
@@ -94,7 +89,6 @@
         color: var(--secondary) !important;
     }
 
-    /* Book card */
     .book-card {
         background: linear-gradient(135deg, white, var(--bg-cream)) !important;
         border: 1px solid var(--border) !important;
@@ -109,14 +103,12 @@
         box-shadow: 0 10px 25px rgba(128, 150, 77, 0.15);
     }
 
-    /* Book cover */
     .book-cover {
         background: linear-gradient(135deg, var(--bg-cream), white);
         color: var(--text-dark);
         border-bottom: 1px solid var(--border);
     }
 
-    /* Link */
     .btn-link.text-primary {
         color: var(--primary) !important;
         text-decoration: none;
@@ -130,7 +122,6 @@
         transform: translateX(2px);
     }
 
-    /* Welcome banner */
     .welcome-banner {
         background: linear-gradient(135deg, white, var(--bg-cream)) !important;
         color: var(--text-dark);
@@ -140,7 +131,6 @@
         border-radius: 12px;
     }
 
-    /* Badge styles */
     .badge.bg-success {
         background: var(--primary) !important;
     }
@@ -157,12 +147,10 @@
         background-color: rgba(128, 150, 77, 0.1) !important;
     }
 
-    /* Text colors */
     .text-muted {
         color: var(--text-light) !important;
     }
 
-    /* Animation */
     @keyframes fadeIn {
         from { opacity: 0; transform: translateY(10px); }
         to { opacity: 1; transform: translateY(0); }
@@ -172,7 +160,6 @@
         animation: fadeIn 0.5s ease forwards;
     }
 
-    /* Typography improvements */
     h1, h2, h3, h4, h5, h6 {
         font-family: 'Poppins', sans-serif;
         font-weight: 600;
@@ -183,7 +170,6 @@
         font-weight: 600 !important;
     }
 
-    /* Icon colors */
     .fa-book-open {
         color: var(--primary);
     }
@@ -289,7 +275,7 @@
                         @endif
                     </h2>
                     @if(!request('search'))
-                    <a href="#" class="btn btn-link text-primary">
+                    <a href="{{ route('books.index') }}" class="btn btn-link text-primary">
                         Lihat Semua <i class="fas fa-chevron-right ms-1"></i>
                     </a>
                     @endif
@@ -337,7 +323,6 @@
 </div>
 
 <script>
-    // Add animation delays for staggered effect
     document.addEventListener('DOMContentLoaded', function() {
         const cards = document.querySelectorAll('.book-card, .stat-card');
         cards.forEach((card, index) => {
