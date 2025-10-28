@@ -56,7 +56,7 @@
         <div class="stat-card bg-white p-6 rounded-2xl shadow-sm border-l-4 border-red-400">
             <div class="flex justify-between items-start">
                 <div>
-                    <p class="text-gray-500 text-sm font-medium">Denda Tertunggak</p>
+                    <p class="text-gray-500 text-sm font-medium">Total Denda</p>
                     <h3 class="text-2xl font-bold mt-2 text-red-600">Rp {{ number_format($totalDenda, 0, ',', '.') }}</h3>
                     <p class="text-xs text-gray-400 mt-1">Belum dibayar</p>
                 </div>
