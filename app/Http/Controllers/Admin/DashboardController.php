@@ -19,11 +19,10 @@ class DashboardController extends Controller
         // Total member
         $totalMember = Member::count();
 
-        // Peminjaman aktif (belum dikembalikan)
-        $peminjamanAktif = Peminjaman::whereNull('tanggal_dikembalikan')->count();
+        // Peminjaman aktif: status masih dipinjam atau terlambat
+        $peminjamanAktif = Peminjaman::whereIn('status', ['dipinjam', 'terlambat'])->count();
 
-        // Total denda tertunggak
-        // Perbaikan: pastikan filter sesuai tipe boolean di DB
+        // Total denda tertunggak (belum dibayar)
         $totalDenda = Denda::where('status_pembayaran', 0)->sum('jumlah_denda');
 
         // Peminjaman hari ini

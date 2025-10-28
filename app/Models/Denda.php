@@ -9,7 +9,7 @@ class Denda extends Model
 {
     use HasFactory;
 
-    protected $table = 'denda';
+    protected $table = 'denda'; // atau 'dendas' kalau tabel plural
 
     protected $fillable = [
         'peminjaman_id',
@@ -20,6 +20,6 @@ class Denda extends Model
 
     public function peminjaman()
     {
-        return $this->belongsTo(Peminjaman::class);
+        return $this->belongsTo(Peminjaman::class, 'peminjaman_id');
     }
 }

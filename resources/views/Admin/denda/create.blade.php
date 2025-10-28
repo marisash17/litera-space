@@ -7,67 +7,37 @@
     <h2 class="text-xl font-semibold text-gray-800 mb-6">Tambah Data Denda</h2>
 
     {{-- Form Simpan Denda --}}
-    <form action="{{ route('admin.denda.store') }}" method="POST">
+    <form action="{{ route('admin.denda.store') }}" method="POST" id="formDenda">
         @csrf
 
-        {{-- Pilih Peminjam --}}
+        {{-- Pilih Peminjaman --}}
         <div class="mb-6">
-            <label class="block text-sm font-medium text-gray-700">Pilih Peminjam *</label>
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-2">
+            <label for="peminjaman_id" class="block text-sm font-medium text-gray-700">Pilih Peminjaman *</label>
+            <select name="peminjaman_id" id="peminjaman_id" required
+                    class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2 focus:ring-green-500 focus:border-green-500">
+                <option value="">-- Pilih Peminjaman --</option>
                 @foreach($peminjamans as $peminjaman)
-                    <div class="p-4 border border-gray-300 rounded-lg cursor-pointer hover:bg-green-50 peminjam-item transition"
-                        data-id="{{ $peminjaman->id }}"
-                        data-buku="{{ $peminjaman->buku->judul ?? '-' }}"
-                        data-penulis="{{ $peminjaman->buku->penulis ?? '-' }}"
-                        data-member="{{ $peminjaman->member->nama ?? '-' }}"
-                        data-email="{{ $peminjaman->member->email ?? '-' }}"
-                        data-pinjam="{{ $peminjaman->tanggal_peminjaman }}"
-                        data-kembali="{{ $peminjaman->tanggal_pengembalian }}"
-                        data-status="{{ ucfirst($peminjaman->status) }}">
-                        <h4 class="font-medium text-gray-900">{{ $peminjaman->member->nama ?? '-' }}</h4>
-                        <p class="text-sm text-gray-700">{{ $peminjaman->buku->judul ?? '-' }}</p>
-                    </div>
+                    <option value="{{ $peminjaman->id }}"
+                        data-tgl-kembali="{{ \Carbon\Carbon::parse($peminjaman->tanggal_pengembalian)->format('Y-m-d') }}"
+                        {{ old('peminjaman_id') == $peminjaman->id ? 'selected' : '' }}>
+                        {{ $peminjaman->member->nama ?? '-' }} - 
+                        {{ $peminjaman->buku->judul ?? '-' }} 
+                        ({{ ucfirst($peminjaman->status) }})
+                    </option>
                 @endforeach
-            </div>
-            <input type="hidden" name="peminjaman_id" id="peminjaman_id" required>
+            </select>
             @error('peminjaman_id')
                 <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
             @enderror
         </div>
 
-        {{-- Detail Peminjaman --}}
-        <div id="peminjaman-detail" class="hidden mb-6 p-4 bg-green-50 rounded-lg border border-green-200">
-            <h3 class="text-lg font-medium text-green-900 mb-3">Detail Peminjaman</h3>
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <div>
-                    <h4 class="font-medium text-green-800">Data Buku</h4>
-                    <p id="detail-judul" class="text-sm text-gray-800"></p>
-                    <p id="detail-penulis" class="text-sm text-gray-600"></p>
-                </div>
-                <div>
-                    <h4 class="font-medium text-green-800">Data Member</h4>
-                    <p id="detail-member" class="text-sm text-gray-800"></p>
-                    <p id="detail-email" class="text-sm text-gray-600"></p>
-                </div>
-                <div>
-                    <h4 class="font-medium text-green-800">Tanggal</h4>
-                    <p id="detail-pinjam" class="text-sm text-gray-700"></p>
-                    <p id="detail-kembali" class="text-sm text-gray-700"></p>
-                </div>
-                <div>
-                    <h4 class="font-medium text-green-800">Status</h4>
-                    <p id="detail-status" class="text-sm text-gray-700"></p>
-                </div>
-            </div>
-        </div>
-
-        {{-- Jumlah Denda dan Status --}}
+        {{-- Jumlah Denda dan Status Pembayaran --}}
         <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
             <div>
                 <label for="jumlah_denda" class="block text-sm font-medium text-gray-700">Jumlah Denda (Rp) *</label>
                 <input type="number" name="jumlah_denda" id="jumlah_denda"
                        value="{{ old('jumlah_denda', 0) }}" min="0" required
-                       class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2 focus:ring-green-500 focus:border-green-500">
+                       class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2 focus:ring-green-500 focus:border-green-500" readonly>
                 @error('jumlah_denda')
                     <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
                 @enderror
@@ -104,33 +74,35 @@
     </form>
 </div>
 
-{{-- Script untuk interaksi peminjaman --}}
-@section('scripts')
+{{-- JS: otomatis hitung jumlah denda Rp 3.000/hari kelipatan keterlambatan --}}
 <script>
 document.addEventListener('DOMContentLoaded', function() {
-    const peminjamanItems = document.querySelectorAll('.peminjam-item');
-    const peminjamanIdInput = document.getElementById('peminjaman_id');
-    const peminjamanDetail = document.getElementById('peminjaman-detail');
+    const peminjamanSelect = document.getElementById('peminjaman_id');
+    const jumlahInput = document.getElementById('jumlah_denda');
+    const TARIF_PER_HARI = 3000;
 
-    peminjamanItems.forEach(item => {
-        item.addEventListener('click', function() {
-            peminjamanIdInput.value = item.dataset.id;
+    function hitungDenda() {
+        const selectedOption = peminjamanSelect.options[peminjamanSelect.selectedIndex];
+        const tglKembali = selectedOption.dataset.tglKembali;
 
-            document.getElementById('detail-judul').textContent = item.dataset.buku;
-            document.getElementById('detail-penulis').textContent = `Penulis: ${item.dataset.penulis}`;
-            document.getElementById('detail-member').textContent = item.dataset.member;
-            document.getElementById('detail-email').textContent = item.dataset.email;
-            document.getElementById('detail-pinjam').textContent = `Pinjam: ${new Date(item.dataset.pinjam).toLocaleDateString('id-ID')}`;
-            document.getElementById('detail-kembali').textContent = `Harus Kembali: ${new Date(item.dataset.kembali).toLocaleDateString('id-ID')}`;
-            document.getElementById('detail-status').textContent = `Status: ${item.dataset.status}`;
+        if(tglKembali) {
+            const tglParts = tglKembali.split('-'); // YYYY-MM-DD
+            const dueDate = new Date(tglParts[0], tglParts[1] - 1, tglParts[2]);
+            const today = new Date();
 
-            peminjamanDetail.classList.remove('hidden');
+            let diffTime = today - dueDate;
+            let diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
 
-            peminjamanItems.forEach(i => i.classList.remove('bg-green-100', 'border-green-500'));
-            item.classList.add('bg-green-100', 'border-green-500');
-        });
-    });
+            jumlahInput.value = diffDays > 0 ? diffDays * TARIF_PER_HARI : 0;
+        } else {
+            jumlahInput.value = 0;
+        }
+    }
+
+    peminjamanSelect.addEventListener('change', hitungDenda);
+
+    // trigger sekali agar terisi jika ada old value
+    hitungDenda();
 });
 </script>
-@endsection
 @endsection

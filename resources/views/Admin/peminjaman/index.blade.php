@@ -72,16 +72,6 @@
                                 </button>
                             </form>
 
-                            {{-- Tombol Kirim Denda --}}
-                            @if($peminjaman->status == 'terlambat')
-                                <form action="{{ route('admin.peminjaman.kirimDenda', $peminjaman->id) }}" method="POST" onsubmit="return confirm('Kirim notifikasi denda ke {{ $peminjaman->member->nama }}?')">
-                                    @csrf
-                                    <button type="submit" class="bg-red-500 hover:bg-red-600 text-white px-3 py-1 rounded-lg text-sm transition" title="Kirim Denda">
-                                        <i class="fas fa-exclamation-triangle"></i>
-                                    </button>
-                                </form>
-                            @endif
-
                             <form action="{{ route('admin.peminjaman.destroy', $peminjaman->id) }}" method="POST" onsubmit="return confirm('Apakah Anda yakin?')">
                                 @csrf
                                 @method('DELETE')

@@ -40,15 +40,21 @@ class Peminjaman extends Model
         return $this->belongsTo(Member::class, 'member_id');
     }
 
-    // Relasi ke User (petugas/admin yang input)
+    // Relasi ke User (petugas/admin)
     public function user()
     {
         return $this->belongsTo(User::class, 'user_id');
     }
 
-    // Relasi ke Pengembalian (opsional)
+    // Relasi ke Pengembalian
     public function pengembalian()
     {
         return $this->hasOne(Pengembalian::class, 'peminjaman_id');
+    }
+
+    // ✅ Relasi ke Denda
+    public function denda()
+    {
+        return $this->hasOne(Denda::class, 'peminjaman_id');
     }
 }
