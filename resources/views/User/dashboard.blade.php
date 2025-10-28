@@ -4,53 +4,72 @@
 
 <style>
     :root {
-        --primary-pastel: #FBEFE3;
-        --primary-text: #3E2723;
-        --hover-pastel: #E7BFA7;
+        --primary: rgb(128, 150, 77);     /* hijau dari login */
+        --primary-dark: rgb(108, 130, 57); /* hijau dark dari login */
+        --secondary: #e09c08;             /* gold/orange dari login */
+        --bg-light: #f6f7fb;              /* background dari login */
+        --bg-cream: #fbefe3;              /* cream dari login */
+        --text-dark: #444;                /* text dari login */
+        --text-light: #666;               /* text light dari login */
+        --border: #ddd;                   /* border dari login */
     }
 
     /* Warna dasar */
     body {
-        background-color: #FFF6F0;
-        color: var(--primary-text);
+        background-color: var(--bg-light);
+        color: var(--text-dark);
+        font-family: 'Poppins', sans-serif;
     }
 
     .bg-primary {
-        background-color: var(--primary-pastel) !important;
+        background: linear-gradient(135deg, var(--bg-cream), white) !important;
     }
 
     .text-primary {
-        color: var(--primary-text) !important;
+        color: var(--primary) !important;
     }
 
     .btn-primary {
-        background-color: var(--primary-pastel) !important;
-        border-color: var(--primary-pastel) !important;
-        color: var(--primary-text) !important;
+        background: linear-gradient(135deg, var(--bg-cream), var(--bg-cream)) !important;
+        border: 2px solid var(--primary) !important;
+        color: var(--primary) !important;
         transition: all 0.3s ease;
+        font-weight: 600;
+        box-shadow: 0 4px 15px rgba(128, 150, 77, 0.2);
     }
 
     .btn-primary:hover {
-        background-color: var(--hover-pastel) !important;
-        border-color: var(--hover-pastel) !important;
-        color: var(--primary-text) !important;
+        background: var(--primary) !important;
+        border-color: var(--primary) !important;
+        color: white !important;
+        transform: translateY(-2px);
+        box-shadow: 0 6px 20px rgba(128, 150, 77, 0.3);
     }
 
     /* Profil circle */
     .profile-circle {
-        background-color: var(--primary-pastel) !important;
-        color: var(--primary-text);
+        background: linear-gradient(135deg, var(--primary), var(--primary-dark)) !important;
+        color: white;
+        font-weight: 600;
     }
 
     /* Search bar */
     .search-bar input {
-        background-color: #fff !important;
+        background-color: white !important;
+        border: 2px solid var(--border);
+        transition: all 0.3s ease;
     }
 
-    /* CARD STATS: kembali ke putih */
+    .search-bar input:focus {
+        border-color: var(--primary);
+        box-shadow: 0 0 0 3px rgba(128, 150, 77, 0.1);
+    }
+
+    /* CARD STATS: putih dengan aksen login */
     .stat-card {
-        background-color: #fff !important;
-        border: none !important;
+        background: linear-gradient(135deg, white, var(--bg-cream)) !important;
+        border: 1px solid var(--border) !important;
+        border-left: 4px solid var(--primary) !important;
         border-radius: 12px;
         box-shadow: 0 4px 12px rgba(0,0,0,0.08);
         transition: all 0.3s ease;
@@ -58,18 +77,28 @@
 
     .stat-card:hover {
         transform: translateY(-4px);
-        box-shadow: 0 10px 25px rgba(0,0,0,0.15);
+        box-shadow: 0 10px 25px rgba(128, 150, 77, 0.15);
     }
 
     /* Ikon dalam stat-card */
     .stat-icon {
-        background-color: rgba(0,0,0,0.04) !important;
+        background: var(--bg-cream) !important;
+        border: 1px solid var(--border);
+    }
+
+    .stat-icon.text-info {
+        color: var(--primary) !important;
+    }
+
+    .stat-icon.text-success {
+        color: var(--secondary) !important;
     }
 
     /* Book card */
     .book-card {
-        background-color: var(--primary-pastel) !important;
-        border: none !important;
+        background: linear-gradient(135deg, white, var(--bg-cream)) !important;
+        border: 1px solid var(--border) !important;
+        border-left: 4px solid var(--primary) !important;
         border-radius: 12px;
         box-shadow: 0 4px 12px rgba(0,0,0,0.08);
         transition: all 0.3s ease;
@@ -77,33 +106,90 @@
 
     .book-card:hover {
         transform: translateY(-5px);
-        box-shadow: 0 10px 25px rgba(0,0,0,0.15);
+        box-shadow: 0 10px 25px rgba(128, 150, 77, 0.15);
     }
 
     /* Book cover */
     .book-cover {
-        background: linear-gradient(135deg, var(--primary-pastel), var(--hover-pastel));
-        color: var(--primary-text);
+        background: linear-gradient(135deg, var(--bg-cream), white);
+        color: var(--text-dark);
+        border-bottom: 1px solid var(--border);
     }
 
     /* Link */
     .btn-link.text-primary {
-        color: var(--primary-text) !important;
+        color: var(--primary) !important;
         text-decoration: none;
+        font-weight: 600;
+        transition: all 0.3s ease;
     }
 
     .btn-link.text-primary:hover {
-        color: var(--hover-pastel) !important;
+        color: var(--primary-dark) !important;
         text-decoration: underline;
+        transform: translateX(2px);
     }
 
-    /* 🔹 Perubahan di sini: welcome-banner kembali putih */
+    /* Welcome banner */
     .welcome-banner {
-        background-color: #ffffff !important;
-        color: var(--primary-text);
-        border: 1px solid rgba(0, 0, 0, 0.05);
+        background: linear-gradient(135deg, white, var(--bg-cream)) !important;
+        color: var(--text-dark);
+        border: 1px solid var(--border);
+        border-left: 4px solid var(--primary);
         box-shadow: 0 4px 12px rgba(0,0,0,0.08);
         border-radius: 12px;
+    }
+
+    /* Badge styles */
+    .badge.bg-success {
+        background: var(--primary) !important;
+    }
+
+    .badge.bg-warning {
+        background: var(--secondary) !important;
+    }
+
+    .badge.bg-primary {
+        background: var(--primary) !important;
+    }
+
+    .bg-opacity-10 {
+        background-color: rgba(128, 150, 77, 0.1) !important;
+    }
+
+    /* Text colors */
+    .text-muted {
+        color: var(--text-light) !important;
+    }
+
+    /* Animation */
+    @keyframes fadeIn {
+        from { opacity: 0; transform: translateY(10px); }
+        to { opacity: 1; transform: translateY(0); }
+    }
+
+    .fade-in {
+        animation: fadeIn 0.5s ease forwards;
+    }
+
+    /* Typography improvements */
+    h1, h2, h3, h4, h5, h6 {
+        font-family: 'Poppins', sans-serif;
+        font-weight: 600;
+        color: var(--text-dark);
+    }
+
+    .fw-bold {
+        font-weight: 600 !important;
+    }
+
+    /* Icon colors */
+    .fa-book-open {
+        color: var(--primary);
+    }
+
+    .fa-search {
+        color: var(--text-light);
     }
 </style>
 
@@ -142,7 +228,7 @@
         <!-- Welcome Banner -->
         <div class="row mb-4">
             <div class="col-12">
-                <div class="welcome-banner rounded-3 p-4 shadow">
+                <div class="welcome-banner rounded-3 p-4 shadow fade-in">
                     <div class="row align-items-center">
                         <div class="col-md-8">
                             <h2 class="h4 mb-2">Dalam Genggaman, Tersimpan Ribuan Cerita</h2>
@@ -159,10 +245,10 @@
         <!-- Quick Stats -->
         <div class="row mb-5">
             <div class="col-md-3 col-6 mb-3">
-                <a href="{{ route('rak.pinjam') }}" class="text-decoration-none text-dark">
-                    <div class="stat-card p-3 h-100">
+                <a href="{{ route('rak.pinjam') }}" class="text-decoration-none">
+                    <div class="stat-card p-3 h-100 fade-in">
                         <div class="d-flex align-items-center">
-                            <div class="stat-icon bg-info bg-opacity-10 rounded-2 p-3 me-3">
+                            <div class="stat-icon rounded-2 p-3 me-3">
                                 <i class="fas fa-bookmark text-info fs-4"></i>
                             </div>
                             <div>
@@ -175,10 +261,10 @@
             </div>
 
             <div class="col-md-3 col-6 mb-3">
-                <a href="{{ route('riwayat.peminjaman') }}" class="text-decoration-none text-dark">
-                    <div class="stat-card p-3 h-100">
+                <a href="{{ route('riwayat.peminjaman') }}" class="text-decoration-none">
+                    <div class="stat-card p-3 h-100 fade-in">
                         <div class="d-flex align-items-center">
-                            <div class="stat-icon bg-success bg-opacity-10 rounded-2 p-3 me-3">
+                            <div class="stat-icon rounded-2 p-3 me-3">
                                 <i class="fas fa-history text-success fs-4"></i>
                             </div>
                             <div>
@@ -212,22 +298,22 @@
                 <div class="row g-3">
                     @forelse($books as $book)
                         <div class="col-xl-3 col-lg-4 col-md-6">
-                            <div class="book-card card h-100">
+                            <div class="book-card card h-100 fade-in">
                                 <div class="book-cover position-relative overflow-hidden" style="height: 200px;">
                                     <div class="position-absolute top-0 end-0 m-3">
                                         <span class="badge bg-{{ $book->status == 'tersedia' ? 'success' : 'warning' }}">
                                             {{ ucfirst($book->status) }}
                                         </span>
                                     </div>
-                                    <div class="d-flex align-items-center justify-content-center h-100 text-white">
-                                        <i class="fas fa-book fa-3x opacity-50"></i>
+                                    <div class="d-flex align-items-center justify-content-center h-100">
+                                        <i class="fas fa-book fa-3x opacity-50" style="color: var(--primary);"></i>
                                     </div>
                                 </div>
                                 <div class="card-body">
                                     <h5 class="card-title fw-bold">{{ $book->judul }}</h5>
                                     <p class="card-text text-muted small">{{ $book->penulis }}</p>
                                     <div class="d-flex justify-content-between align-items-center">
-                                        <span class="badge bg-primary bg-opacity-10 text-primary">
+                                        <span class="badge bg-opacity-10 text-primary">
                                             {{ $book->kategori ?? 'Umum' }}
                                         </span>
                                         <a href="{{ route('rak.pinjam') }}" class="btn btn-primary btn-sm rounded-circle" title="Pinjam Buku">
@@ -249,4 +335,14 @@
 
     </div>
 </div>
+
+<script>
+    // Add animation delays for staggered effect
+    document.addEventListener('DOMContentLoaded', function() {
+        const cards = document.querySelectorAll('.book-card, .stat-card');
+        cards.forEach((card, index) => {
+            card.style.animationDelay = `${index * 0.1}s`;
+        });
+    });
+</script>
 @endsection

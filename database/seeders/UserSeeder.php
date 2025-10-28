@@ -11,19 +11,23 @@ class UserSeeder extends Seeder
     public function run(): void
     {
         // Akun Admin
-        User::create([
-            'name' => 'Admin LiteraSpace',
-            'email' => 'admin@literaspace.com',
-            'password' => Hash::make('password'),
-            'role' => 'admin',
-        ]);
+        User::updateOrCreate(
+            ['email' => 'admin@literaspace.com'], // cek berdasarkan email
+            [
+                'name' => 'Admin LiteraSpace',
+                'password' => Hash::make('password'), // reset password
+                'role' => 'admin',
+            ]
+        );
 
         // Akun Pengguna
-        User::create([
-            'name' => 'Pengguna Biasa',
-            'email' => 'user@literaspace.com',
-            'password' => Hash::make('password'),
-            'role' => 'user',
-        ]);
+        User::updateOrCreate(
+            ['email' => 'user@literaspace.com'], // cek berdasarkan email
+            [
+                'name' => 'Pengguna Biasa',
+                'password' => Hash::make('password'),
+                'role' => 'user',
+            ]
+        );
     }
 }

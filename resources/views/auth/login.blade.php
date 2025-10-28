@@ -1,13 +1,10 @@
 <!DOCTYPE html>
 <html lang="id">
 <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>{{ config('app.name', 'LiteraSpace') }} - Login</title>
-
-    <!-- Font -->
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
-
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LiteraSpace - Login</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <style>
         * {
             margin: 0;
@@ -37,7 +34,7 @@
 
         .image-section {
             flex: 1;
-            background: linear-gradient(135deg, #fbefe3, white);
+            background: linear-gradient(135deg, white, #fbefe3);
             display: flex;
             flex-direction: column;
             justify-content: center;
@@ -123,9 +120,9 @@
 
         input:focus {
             outline: none;
-            border-color: #795218;
+            border-color: rgb(128, 150, 77);
             background-color: #fff;
-            box-shadow: 0 0 0 3px rgb(128, 150, 77);
+            box-shadow: 0 0 0 3px rgba(128, 150, 77, 0.1);
         }
 
         .password-toggle {
@@ -143,14 +140,14 @@
         .btn-login {
             background: linear-gradient(135deg, #fbefe3, #fbefe3);
             color: rgb(128, 150, 77);
-            border: none;
+            border: 2px solid rgb(128, 150, 77);
             border-radius: 10px;
             padding: 16px;
             font-size: 16px;
             font-weight: 600;
             cursor: pointer;
             transition: all 0.3s;
-            box-shadow: 0 4px 15px rgb(128, 150, 77);
+            box-shadow: 0 4px 15px rgba(128, 150, 77, 0.2);
             width: 100%;
             margin-top: 10px;
             margin-bottom: 20px;
@@ -158,7 +155,9 @@
 
         .btn-login:hover {
             transform: translateY(-2px);
-            box-shadow: 0 6px 20px rgb(128, 150, 77);
+            box-shadow: 0 6px 20px rgba(128, 150, 77, 0.3);
+            background: rgb(128, 150, 77);
+            color: white;
         }
 
         .auth-link {
@@ -232,9 +231,21 @@
                     </div>
                 </div>
 
+                <div class="forgot-password">
+                    <a href="{{ route('password.request') }}">Lupa kata sandi?</a>
+                </div>
+
                 @if (session('success'))
                     <div class="mb-4 p-3 text-green-800 bg-green-100 rounded-lg">
                         {{ session('success') }}
+                    </div>
+                @endif
+
+                @if ($errors->any())
+                    <div class="mb-4 p-3 text-red-800 bg-red-100 rounded-lg">
+                        @foreach ($errors->all() as $error)
+                            {{ $error }}
+                        @endforeach
                     </div>
                 @endif
 
