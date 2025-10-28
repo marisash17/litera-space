@@ -33,7 +33,6 @@ class User extends Authenticatable
         return $this->belongsTo(Member::class); 
     }
 
-
     public function peminjaman()
     {
         return $this->hasMany(Peminjaman::class);

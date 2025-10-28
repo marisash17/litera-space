@@ -232,12 +232,6 @@
                     </div>
                 </div>
 
-                <div class="forgot-password">
-                    @if (Route::has('password.request'))
-                        <a href="{{ route('password.request') }}">Lupa Kata Sandi?</a>
-                    @endif
-                </div>
-
                 @if (session('success'))
                     <div class="mb-4 p-3 text-green-800 bg-green-100 rounded-lg">
                         {{ session('success') }}

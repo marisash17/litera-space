@@ -30,7 +30,7 @@
         <div class="stat-card bg-white p-6 rounded-2xl shadow-sm border-l-4 border-green-400">
             <div class="flex justify-between items-start">
                 <div>
-                    <p class="text-gray-500 text-sm font-medium">Member Aktif</p>
+                    <p class="text-gray-500 text-sm font-medium">Total Member</p>
                     <h3 class="text-2xl font-bold mt-2 text-green-600">{{ $totalMember }}</h3>
                     <p class="text-xs text-gray-400 mt-1">Anggota terdaftar</p>
                 </div>
@@ -43,7 +43,7 @@
         <div class="stat-card bg-white p-6 rounded-2xl shadow-sm border-l-4 border-yellow-400">
             <div class="flex justify-between items-start">
                 <div>
-                    <p class="text-gray-500 text-sm font-medium">Peminjaman Aktif</p>
+                    <p class="text-gray-500 text-sm font-medium">Total Peminjaman</p>
                     <h3 class="text-2xl font-bold mt-2 text-yellow-600">{{ $peminjamanAktif }}</h3>
                     <p class="text-xs text-gray-400 mt-1">Sedang dipinjam</p>
                 </div>
@@ -71,7 +71,7 @@
         <!-- Quick Actions -->
         <div class="bg-white p-6 rounded-2xl shadow-sm">
             <h3 class="text-xl font-bold text-gray-800 mb-4 flex items-center">
-                <i class="fas fa-bolt text-yellow-500 mr-2"></i> Aksi Cepat
+                <i class="fas fa-bolt text-blue-500 mr-2"></i> Aksi Cepat
             </h3>
             <div class="grid grid-cols-2 gap-4">
                 <a href="{{ route('admin.buku.create') }}" class="btn-primary text-white px-4 py-4 rounded-xl font-medium transition flex items-center justify-center text-center">
@@ -86,13 +86,13 @@
                         <span class="text-sm">Tambah Member</span>
                     </div>
                 </a>
-                <a href="{{ route('admin.peminjaman.create') }}" class="bg-gradient-to-r from-yellow-400 to-orange-400 hover:from-yellow-500 hover:to-orange-500 text-white px-4 py-4 rounded-xl font-medium transition flex items-center justify-center text-center">
+                <a href="{{ route('admin.peminjaman.create') }}" class="bg-gradient-to-r from-blue-400 to-blue-600 hover:from-blue-500 hover:to-blue-700 text-white px-4 py-4 rounded-xl font-medium transition flex items-center justify-center text-center">
                     <div>
                         <i class="fas fa-hand-holding text-lg mb-1 block"></i>
                         <span class="text-sm">Peminjaman Baru</span>
                     </div>
                 </a>
-                <a href="{{ route('admin.denda.index') }}" class="bg-gradient-to-r from-pink-400 to-red-400 hover:from-pink-500 hover:to-red-500 text-white px-4 py-4 rounded-xl font-medium transition flex items-center justify-center text-center">
+                <a href="{{ route('admin.denda.index') }}" class="bg-gradient-to-r from-purple-400 to-purple-600 hover:from-purple-500 hover:to-purple-700 text-white px-4 py-4 rounded-xl font-medium transition flex items-center justify-center text-center">
                     <div>
                         <i class="fas fa-file-invoice-dollar text-lg mb-1 block"></i>
                         <span class="text-sm">Kelola Denda</span>
@@ -104,7 +104,7 @@
         <!-- Aktivitas Hari Ini -->
         <div class="bg-white p-6 rounded-2xl shadow-sm">
             <h3 class="text-xl font-bold text-gray-800 mb-4 flex items-center">
-                <i class="far fa-clock text-purple-500 mr-2"></i> Aktivitas Hari Ini
+                <i class="far fa-clock text-blue-500 mr-2"></i> Aktivitas Hari Ini
             </h3>
             <div class="space-y-3">
                 <div class="flex items-center justify-between p-3 bg-blue-50 rounded-lg">
@@ -139,7 +139,7 @@
     <!-- Buku Paling Populer -->
     <div class="bg-white p-6 rounded-2xl shadow-sm">
         <h3 class="text-xl font-bold text-gray-800 mb-4 flex items-center">
-            <i class="fas fa-chart-line text-green-500 mr-2"></i> Buku Paling Populer
+            <i class="fas fa-chart-line text-blue-500 mr-2"></i> Buku Paling Populer
         </h3>
         <div class="overflow-x-auto">
             <table class="w-full">

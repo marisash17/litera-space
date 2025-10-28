@@ -46,22 +46,17 @@ Route::middleware(['auth'])->group(function () {
     // -----------------------------
     // Rak Pinjam (user)
     // -----------------------------
-    // Halaman rak pinjam
-    Route::get('/rak-pinjam', [RakPinjamController::class, 'index'])->name('rak.pinjam');
+Route::get('/rak', [RakPinjamController::class, 'index'])->name('rak.pinjam');
 
-    // Tambah buku ke rak pinjam → POST
-    Route::post('/rak-pinjam/add/{id}', [RakPinjamController::class, 'pinjam'])->name('rak.add');
+// route untuk aksi meminjam buku (harus POST!)
+Route::post('/rak/pinjam/{id}', [RakPinjamController::class, 'pinjam'])->name('rak.pinjam.post');
 
-    // Kembalikan buku → POST
-    Route::post('/rak-pinjam/kembalikan/{id}', [RakPinjamController::class, 'kembalikan'])->name('kembalikan.buku');
+// route untuk mengembalikan buku
+Route::post('/rak/kembalikan/{id}', [RakPinjamController::class, 'kembalikan'])->name('rak.kembalikan');
 
-    // Baca buku → GET
-    Route::get('/buku/baca/{id}', [RakPinjamController::class, 'baca'])->name('baca.buku');
+// riwayat
+Route::get('/riwayat', [RakPinjamController::class, 'riwayat'])->name('riwayat.peminjaman');
 
-    // Riwayat peminjaman
-    Route::get('/riwayat', [RakPinjamController::class, 'riwayat'])->name('riwayat');
-    Route::get('/riwayat-peminjaman', [RakPinjamController::class, 'riwayat'])->name('riwayat.peminjaman');
-    
     // -----------------------------
     // Riwayat Peminjaman (user)
     // -----------------------------
